@@ -69,21 +69,30 @@
 
             const customerList = document.getElementById('customer-list')
             customerList.innerHTML = '';
-            customers.map(ele => {
+            customers.forEach(ele => {
                 const contact = document.createElement('div')
+                const deleteButton = document.createElement('button')
+
+                deleteButton.innerHTML = 'Destroy'
+                deleteButton.addEventListener('click',(ev) => {
+                    customers = customers.filter(item => item.id !== ele.id)
+                    console.log(customers, ele.id)
+                    render()
+                })
+
                 contact.innerHTML = `${ele.name} ${ele.isVIP ? 'is a vip' : ''} (${ele.email})`
+                contact.append(deleteButton)
                 customerList.append(contact)
+
             })
         };
 
         const form = document.getElementById('customer-form');
         form.addEventListener('submit', (ev) => {
             ev.preventDefault();
-
             const nameInput = document.getElementById('name');
             const emailInput = document.getElementById('email');
             const isVipCheckbox = document.getElementById('isVip');
-
             const errorList = document.getElementById('errors');
             errorList.innerHTML = '';
             if (!nameInput.value) {
@@ -106,6 +115,10 @@
                 });
                 render();
             }
+
+            nameInput.value = '';
+            emailInput.value = '';
+            isVipCheckbox.checked = false;
         });
 
         render();
