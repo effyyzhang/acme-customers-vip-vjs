@@ -15,27 +15,31 @@
             label{
                 margin-right: 40px;
             }
+
+            #errors {
+                color: red;
+            }
         </style>
     </head>
     <body>
         <h1>
             Acme Customers <span>VIP</span>
         </h1>
-        <form>
+        <form id="customer-form">
             <h3>
                 Customer Input Form
             </h3>
             <div class="row">
                     <label>Name</label>
-                    <input type="text">
+                    <input type="text" id="name" name="name">
             </div>
             <div class="row">
                     <label>Email</label>
-                    <input type="text">
+                    <input type="text" id="email" name="email">
             </div>
             <div class="row">
                     <label>isVIP</label>
-                    <input type="checkbox">
+                    <input type="checkbox" id="isVip">
             </div>
 
             <ul id='errors'>
@@ -56,17 +60,55 @@
         { id: 2, name: 'larry', isVIP: true, email: 'larry@gmail.com'},
         { id: 4, name: 'shep', email: 'shep@gmail.com'},
         ];
+        let maxId = Math.max(...customers.map(element => element.id));
 
-        const vipCustomerCountDiv = document.getElementById('count')
-        const vipCount = customers.filter(ele => ele.isVIP).length
-        vipCustomerCountDiv.innerHTML = `${vipCount} VIPS`
+        const render = () => {
+            const vipCustomerCountDiv = document.getElementById('count')
+            const vipCount = customers.filter(ele => ele.isVIP).length
+            vipCustomerCountDiv.innerHTML = `${vipCount} VIPS`
 
-        const customerList = document.getElementById('customer-list')
-        customers.map(ele => {
-            const contact = document.createElement('div')
-            contact.innerHTML = `${ele.name}(${ele.email})`
-            customerList.append(contact)
-        })
+            const customerList = document.getElementById('customer-list')
+            customerList.innerHTML = '';
+            customers.map(ele => {
+                const contact = document.createElement('div')
+                contact.innerHTML = `${ele.name} ${ele.isVIP ? 'is a vip' : ''} (${ele.email})`
+                customerList.append(contact)
+            })
+        };
+
+        const form = document.getElementById('customer-form');
+        form.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const isVipCheckbox = document.getElementById('isVip');
+
+            const errorList = document.getElementById('errors');
+            errorList.innerHTML = '';
+            if (!nameInput.value) {
+                const li = document.createElement('li');
+                li.innerHTML = 'name required';
+                errorList.append(li);
+            }
+            if (!emailInput.value) {
+                const li = document.createElement('li');
+                li.innerHTML = 'email required';
+                errorList.append(li);
+            }
+
+            if (nameInput.value && emailInput.value) {
+                customers.push({
+                    id: maxId ++,
+                    name: nameInput.value,
+                    email: emailInput.value,
+                    isVIP: isVipCheckbox.checked
+                });
+                render();
+            }
+        });
+
+        render();
 
     </script>
 </html>
