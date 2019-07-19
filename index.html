@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <style>
+            form{
+                display: flex;
+                flex-direction: column;
+                width: 400px;
+            }
+
+            .row{
+                width: 100%;
+                margin: 10px;
+            }
+
+            label{
+                margin-right: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>
+            Acme Customers <span>VIP</span>
+        </h1>
+        <form>
+            <h3>
+                Customer Input Form
+            </h3>
+            <div class="row">
+                    <label>Name</label>
+                    <input type="text">
+            </div>
+            <div class="row">
+                    <label>Email</label>
+                    <input type="text">
+            </div>
+            <div class="row">
+                    <label>isVIP</label>
+                    <input type="checkbox">
+            </div>
+
+            <ul id='errors'>
+            </ul>
+            <button>Create</button>
+        </form>
+        <div id="result">
+            <div id="count">
+            </div>
+            <div id="customer-list">
+            </div>
+        </div>
+
+    </body>
+    <script>
+        let customers = [
+        { id: 1, name: 'moe', email: 'moe@gmail.com', isVIP: true},
+        { id: 2, name: 'larry', isVIP: true, email: 'larry@gmail.com'},
+        { id: 4, name: 'shep', email: 'shep@gmail.com'},
+        ];
+
+        const vipCustomerCountDiv = document.getElementById('count')
+        const vipCount = customers.filter(ele => ele.isVIP).length
+        vipCustomerCountDiv.innerHTML = `${vipCount} VIPS`
+
+        const customerList = document.getElementById('customer-list')
+        customers.map(ele => {
+            const contact = document.createElement('div')
+            contact.innerHTML = `${ele.name}(${ele.email})`
+            customerList.append(contact)
+        })
+
+    </script>
+</html>
